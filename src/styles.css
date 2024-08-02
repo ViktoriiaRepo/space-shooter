@@ -1,0 +1,9 @@
+@import './libs/normalize.css';
+
+body {
+  padding-block: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e3d9ed;
+}
