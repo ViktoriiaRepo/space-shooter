@@ -7,9 +7,8 @@ export class Asteroid {
 
   constructor(app: Application) {
     this.app = app;
-    this.speed = 2;
+    this.speed = 0.3;
     this.sprite = new Sprite();
-    this.init();
   }
 
   async init() {
@@ -21,6 +20,8 @@ export class Asteroid {
       Math.random() * (this.app.screen.width - this.sprite.width) +
       this.sprite.width / 2;
     this.sprite.y = Math.random() * -this.sprite.height;
+
+    this.sprite.rotation = Math.random() * Math.PI * 2;
 
     this.app.stage.addChild(this.sprite);
   }
@@ -34,7 +35,18 @@ export class Asteroid {
         this.sprite.x =
           Math.random() * (this.app.screen.width - this.sprite.width) +
           this.sprite.width / 2;
+
+        this.sprite.rotation = Math.random() * Math.PI * 2;
       }
     }
+  }
+
+  isOutOfBounds(): boolean {
+    return this.sprite.y > this.app.screen.height;
+  }
+
+  destroy() {
+    this.app.stage.removeChild(this.sprite);
+    this.sprite.destroy();
   }
 }

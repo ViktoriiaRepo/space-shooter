@@ -4,25 +4,45 @@ import { Asteroid } from './asteroid';
 export class Asteroids {
   asteroids: Asteroid[] = [];
   app: Application;
-  asteroidCount: number;
+  maxAsteroids: number;
+  asteroidCreatedCount: number = 0;
+  maxActiveAsteroids: number = 5;
 
-  constructor(app: Application, count: number) {
+  constructor(app: Application, maxAsteroids: number) {
     this.app = app;
-    this.asteroidCount = count;
-    this.init();
+    this.maxAsteroids = maxAsteroids;
   }
 
-  init() {
-    for (let i = 0; i < this.asteroidCount; i++) {
-      const asteroid = new Asteroid(this.app);
+  startSpawning() {
+    this.createAsteroidsIfNeeded();
+  }
 
-      this.asteroids.push(asteroid);
+  async createAsteroid() {
+    const asteroid = new Asteroid(this.app);
+    await asteroid.init();
+    this.asteroids.push(asteroid);
+    this.app.stage.addChild(asteroid.sprite);
+  }
+
+  createAsteroidsIfNeeded() {
+    if (
+      this.asteroidCreatedCount < this.maxAsteroids &&
+      this.asteroids.length < this.maxActiveAsteroids
+    ) {
+      this.createAsteroid();
+      this.asteroidCreatedCount++;
     }
-
-    this.app.ticker.add(this.update, this);
   }
 
   update() {
-    this.asteroids.forEach((asteroid) => asteroid.update());
+    this.asteroids.forEach((asteroid, index) => {
+      asteroid.update();
+      if (asteroid.isOutOfBounds()) {
+        this.app.stage.removeChild(asteroid.sprite);
+        this.asteroids.splice(index, 1);
+      }
+    });
+
+    this.createAsteroidsIfNeeded();
   }
 }

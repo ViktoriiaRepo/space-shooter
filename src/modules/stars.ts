@@ -9,7 +9,7 @@ interface Star {
 
 export class Stars {
   starAmount: number = 1000;
-  cameraZ: number = 0;
+  cameraZ: number = -2;
   fov: number = 20;
   baseSpeed: number = 0.025;
   speed: number = 0;
