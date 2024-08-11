@@ -1,12 +1,15 @@
 import { Application, Sprite, Assets } from 'pixi.js';
 import { Bullet } from './bullet';
+import { Explosion } from './explosion';
 
 export class Spaceship {
   sprite: Sprite;
   speed: number;
   app: Application;
   bullets: Bullet[] = [];
+  // maxBullets: number = 10;
   maxBullets: number = 10;
+  playerKilled: boolean = false;
 
   constructor(app: Application) {
     this.app = app;
@@ -22,18 +25,30 @@ export class Spaceship {
     this.sprite.x = this.app.screen.width / 2;
     this.sprite.y = this.app.screen.height - 150;
 
-    this.app.stage.addChild(this.sprite);
+    this.appear();
+  }
+
+  initPosition() {
+    this.sprite.x = this.app.screen.width / 2;
+    this.sprite.y = this.app.screen.height - 150;
   }
 
   moveLeft() {
-    this.sprite.x = Math.max(this.sprite.width / 2, this.sprite.x - this.speed);
+    if (this.sprite) {
+      this.sprite.x = Math.max(
+        this.sprite.width / 2,
+        this.sprite.x - this.speed
+      );
+    }
   }
 
   moveRight() {
-    this.sprite.x = Math.min(
-      this.app.screen.width - this.sprite.width / 2,
-      this.sprite.x + this.speed
-    );
+    if (this.sprite) {
+      this.sprite.x = Math.min(
+        this.app.screen.width - this.sprite.width / 2,
+        this.sprite.x + this.speed
+      );
+    }
   }
 
   shoot() {
@@ -53,8 +68,40 @@ export class Spaceship {
       if (bullet.isOffScreen()) {
         bullet.destroy();
         this.bullets.splice(index, 1);
-        console.log('this.bullets :>> ', this.bullets);
       }
     });
+  }
+
+  async explode() {
+    const x = this.sprite.x;
+    const y = this.sprite.y;
+
+    this.app.stage.removeChild(this.sprite);
+
+    const exp: Explosion = new Explosion(this.app);
+    await exp.explode(x, y, 0.7);
+  }
+
+  disappear() {
+    if (this.sprite) {
+      this.playerKilled = true;
+      this.app.stage.removeChild(this.sprite);
+      // this.sprite.destroy();
+    }
+  }
+
+  appear() {
+    if (this.sprite) {
+      this.playerKilled = false;
+      this.app.stage.addChild(this.sprite);
+    }
+  }
+
+  removeBullets() {
+    this.bullets.forEach((bullet, index) => {
+      bullet.destroy();
+    });
+
+    this.bullets = [];
   }
 }

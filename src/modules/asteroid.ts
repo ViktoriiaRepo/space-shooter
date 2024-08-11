@@ -1,4 +1,5 @@
-import { Application, Sprite, Assets } from 'pixi.js';
+import { Application, Sprite, Texture } from 'pixi.js';
+import { Explosion } from './explosion';
 
 export class Asteroid {
   sprite: Sprite;
@@ -11,15 +12,14 @@ export class Asteroid {
     this.sprite = new Sprite();
   }
 
-  async init() {
-    const texture = await Assets.load('img/asteroid180.png');
+  async init(texture: Texture) {
     this.sprite.texture = texture;
 
     this.sprite.anchor.set(0.5);
     this.sprite.x =
       Math.random() * (this.app.screen.width - this.sprite.width) +
       this.sprite.width / 2;
-    this.sprite.y = Math.random() * -this.sprite.height;
+    this.sprite.y = Math.random() * (-this.sprite.height * 3);
 
     this.sprite.rotation = Math.random() * Math.PI * 2;
 
@@ -45,8 +45,17 @@ export class Asteroid {
     return this.sprite.y > this.app.screen.height;
   }
 
-  destroy() {
+  async explode() {
+    const x = this.sprite.x;
+    const y = this.sprite.y;
+
     this.app.stage.removeChild(this.sprite);
-    this.sprite.destroy();
+
+    const exp: Explosion = new Explosion(this.app);
+    await exp.explode(x, y, 0.7);
+  }
+
+  destroy() {
+    this.sprite.destroy({ texture: false });
   }
 }

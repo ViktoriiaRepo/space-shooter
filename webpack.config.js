@@ -36,7 +36,10 @@ module.exports = {
       filename: '[name].[contenthash].css',
     }),
     new CopyWebpackPlugin({
-      patterns: [{ from: 'img', to: 'img' }],
+      patterns: [
+        { from: 'img', to: 'img' },
+        { from: 'src/assets', to: 'assets' },
+      ],
     }),
   ],
   module: {
@@ -75,6 +78,10 @@ module.exports = {
           'ts-loader',
         ],
         exclude: /node_modules/,
+      },
+      {
+        test: /\.json$/,
+        type: 'json',
       },
     ],
   },

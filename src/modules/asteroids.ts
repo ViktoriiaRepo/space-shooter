@@ -1,4 +1,4 @@
-import { Application } from 'pixi.js';
+import { Application, Assets, Texture } from 'pixi.js';
 import { Asteroid } from './asteroid';
 
 export class Asteroids {
@@ -6,11 +6,18 @@ export class Asteroids {
   app: Application;
   maxAsteroids: number;
   asteroidCreatedCount: number = 0;
-  maxActiveAsteroids: number = 5;
+  maxActiveAsteroids: number = 10;
+  texture: Texture;
 
   constructor(app: Application, maxAsteroids: number) {
     this.app = app;
     this.maxAsteroids = maxAsteroids;
+  }
+
+  async init(): Promise<Texture> {
+    return Assets.load('img/asteroid180.png').then(
+      (a: Texture) => (this.texture = a)
+    );
   }
 
   startSpawning() {
@@ -19,7 +26,7 @@ export class Asteroids {
 
   async createAsteroid() {
     const asteroid = new Asteroid(this.app);
-    await asteroid.init();
+    asteroid.init(this.texture);
     this.asteroids.push(asteroid);
     this.app.stage.addChild(asteroid.sprite);
   }
@@ -44,5 +51,12 @@ export class Asteroids {
     });
 
     this.createAsteroidsIfNeeded();
+  }
+  deleteAll(): void {
+    this.asteroids.forEach((asteroid) => {
+      this.app.stage.removeChild(asteroid.sprite);
+      asteroid.destroy();
+    });
+    this.asteroids = [];
   }
 }

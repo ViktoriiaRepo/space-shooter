@@ -31,6 +31,16 @@ body {
   z-index: 1000;
 }
 
+#hp {
+  position: absolute;
+  top: 80px;
+  left: 20px;
+  font-size: 32px;
+  color: #f60059;
+  z-index: 1000;
+  display:none;
+}
+
 #start-new-game {
   position: absolute;
   bottom: 5px;
