@@ -7,13 +7,12 @@ export class Spaceship {
   speed: number;
   app: Application;
   bullets: Bullet[] = [];
-  // maxBullets: number = 10;
   maxBullets: number = 10;
   playerKilled: boolean = false;
 
   constructor(app: Application) {
     this.app = app;
-    this.speed = 3;
+    this.speed = 4;
     this.init();
   }
 
@@ -86,7 +85,6 @@ export class Spaceship {
     if (this.sprite) {
       this.playerKilled = true;
       this.app.stage.removeChild(this.sprite);
-      // this.sprite.destroy();
     }
   }
 

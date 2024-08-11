@@ -226,7 +226,6 @@ export class GamePlay {
   }
 
   startBossLevel() {
-    //this.ticker.stop();
     this.pause();
     this.timeLeft = 60;
     this.maxAmountBullet = 10;
