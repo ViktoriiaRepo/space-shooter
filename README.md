@@ -4,7 +4,7 @@
 
 Space Shooter is a simple arcade-style game where players control a spaceship, shoot asteroids, and battle a boss. The game is built using HTML, JavaScript/TypeScript, and the PIXI.js library for rendering graphics.
 
-<img src="img/img.png" width="100%">
+<img src="./img/img.png" width="100%">
 
 ## Features
 
