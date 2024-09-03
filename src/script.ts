@@ -78,7 +78,13 @@ const wrapper = document.querySelector('.wrapper');
     startButton.style.display = 'none';
     gamePlay.startGame();
   }
-  window.addEventListener('keydown', (e) => gamePlay.keyPress(e.key));
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === ' ') {
+      e.preventDefault();
+    }
+    gamePlay.keyPress(e.key);
+  });
 
   startButton.addEventListener('click', startGame);
 })();
